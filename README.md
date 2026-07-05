@@ -1,2 +1,12 @@
-# AI-application-engineering-roadmap
-This repository records my transition from computer science postgraduate research to AI application engineering, covering Python backend development, PyTorch basics, vector search, RAG and deployment.
+# Week 01 Python 工程化：文档预处理模块
+
+## 项目目标
+构建可复用的文档预处理工具，为 RAG 系统提供标准化的文本切块能力，支持批量读取、文本清洗、固定窗口切块、结构化 JSON 输出。
+
+## 技术栈
+- Python 3.x
+- pathlib（路径管理）
+- logging（日志输出）
+- re（文本清洗）
+- json（结果输出）
+
