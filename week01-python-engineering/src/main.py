@@ -1,30 +1,28 @@
-from config import RAW_DATA_DIR, CHUNK_SIZE, CHUNK_OVERLAP
+from config import RAW_DATA_DIR, OUTPUT_JSON, CHUNK_SIZE, CHUNK_OVERLAP
 from file_loader import load_raw_documents
 from text_cleaner import clean_text
 from chunker import create_chunks_for_document
+from json_writer import save_chunks_to_json
 from logger import get_logger
 
 logger = get_logger()
 
 if __name__ == "__main__":
-    logger.info("Project started")
+    logger.info("项目启动：开始文档预处理流水线")
     
-    # 1. 批量读取原始文档
+    # 1. 读取原始文档
     docs = load_raw_documents(RAW_DATA_DIR)
-    logger.info(f"Loaded {len(docs)} documents")
+    logger.info(f"读取完成，共 {len(docs)} 个文档")
     
     all_chunks = []
+    
     # 2. 逐篇清洗 + 切块
     for doc in docs:
-        before_len = len(doc["text"])
         doc["text"] = clean_text(doc["text"])
-        after_len = len(doc["text"])
-        logger.info(f"清洗完成：{doc['source_file']} | 字符数 {before_len} → {after_len}")
-        
-        # 生成切块
         chunks = create_chunks_for_document(doc, CHUNK_SIZE, CHUNK_OVERLAP)
         all_chunks.extend(chunks)
-        logger.info(f"生成切块：{doc['source_file']} | 共 {len(chunks)} 个chunk")
+        logger.info(f"处理完成：{doc['source_file']}，生成 {len(chunks)} 个切块")
     
-    # 3. 输出总切块数
-    logger.info(f"全部文档处理完成，总切块数：{len(all_chunks)}")
+    # 3. 保存结果到JSON文件
+    save_chunks_to_json(all_chunks, OUTPUT_JSON)
+    logger.info(f"全部处理完成，共 {len(all_chunks)} 个切块，已保存到 {OUTPUT_JSON}")
