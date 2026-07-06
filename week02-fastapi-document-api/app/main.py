@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from app.routers import documents
+from app.core.config import ensure_directories
+ 
+ensure_directories()
  
 app = FastAPI(
     title="Document Management API",
