@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "doc_id": "73d084ff3469",
+    "filename": "sample.txt",
+    "content_type": "text/plain",
+    "raw_path": "D:\\AI engineer\\AI-application-engineering-roadmap\\week02-fastapi-document-api\\data\\raw\\73d084ff3469_sample.txt",
+    "chunk_path": "D:\\AI engineer\\AI-application-engineering-roadmap\\week02-fastapi-document-api\\data\\processed\\73d084ff3469_chunks.json",
+    "chunk_count": 0,
+    "created_at": "2026-07-07T19:39:00"
+  },
+  {
+    "doc_id": "f52b978ee9f3",
+    "filename": "sample.txt",
+    "content_type": "text/plain",
+    "raw_path": "D:\\AI engineer\\AI-application-engineering-roadmap\\week02-fastapi-document-api\\data\\raw\\f52b978ee9f3_sample.txt",
+    "chunk_path": "D:\\AI engineer\\AI-application-engineering-roadmap\\week02-fastapi-document-api\\data\\processed\\f52b978ee9f3_chunks.json",
+    "chunk_count": 0,
+    "created_at": "2026-07-07T19:39:03"
+  }
+]
