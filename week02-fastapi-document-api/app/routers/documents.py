@@ -5,6 +5,9 @@ from app.services.document_service import process_uploaded_file
 from app.services.storage_service import load_documents
 from app.core.config import DB_PATH
  
+from app.schemas.document_schema import DocumentResponse
+from app.services.storage_service import get_document_by_id
+
 router = APIRouter()
  
  
@@ -22,6 +25,12 @@ async def upload_document(file: UploadFile = File(...)):
         "message": "File uploaded and preprocessed successfully."
     }
  
+@router.get("/documents/{doc_id}", response_model=DocumentResponse)
+def get_document(doc_id: str):
+    document = get_document_by_id(doc_id, DB_PATH)
+    if document is None:
+        raise HTTPException(status_code=404, detail="Document not found.")
+    return document
  
 @router.get("/documents", response_model=DocumentListResponse)
 def list_documents():
