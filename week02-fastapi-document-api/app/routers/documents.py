@@ -7,6 +7,8 @@ from app.core.config import DB_PATH
  
 from app.schemas.document_schema import DocumentResponse
 from app.services.storage_service import get_document_by_id
+from app.schemas.document_schema import DeleteResponse
+from app.services.document_service import delete_document_and_files
 
 router = APIRouter()
  
@@ -36,3 +38,13 @@ def get_document(doc_id: str):
 def list_documents():
     documents = load_documents(DB_PATH)
     return {"documents": documents, "total": len(documents)}
+
+@router.delete("/documents/{doc_id}", response_model=DeleteResponse)
+def delete_document(doc_id: str):
+    deleted = delete_document_and_files(doc_id)
+    if deleted is None:
+        raise HTTPException(status_code=404, detail="Document not found.")
+    return {
+        "doc_id": doc_id,
+        "message": "Document deleted successfully."
+    }

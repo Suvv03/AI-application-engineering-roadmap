@@ -13,7 +13,9 @@ from app.core.config import (
 )
 from app.services.preprocessing import clean_text, create_chunks_for_document
 from app.services.storage_service import add_document
+from app.services.storage_service import remove_document_by_id
  
+
  
 def decode_text(contents: bytes) -> str:
     try:
@@ -65,4 +67,17 @@ async def process_uploaded_file(file: UploadFile) -> dict:
         "created_at": datetime.now().isoformat(timespec="seconds")
     }
     add_document(record, DB_PATH)
+    return record
+
+
+def delete_document_and_files(doc_id: str) -> dict | None:
+    record = remove_document_by_id(doc_id, DB_PATH)
+    if record is None:
+        return None
+ 
+    for path_key in ["raw_path", "chunk_path"]:
+        path = Path(record[path_key])
+        if path.exists():
+            path.unlink()
+ 
     return record
