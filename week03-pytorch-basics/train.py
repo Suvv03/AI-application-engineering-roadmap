@@ -34,6 +34,27 @@ def train_one_epoch(model, train_loader, criterion, optimizer, device):
     return avg_loss
 
 
+def evaluate(model, test_loader, device):
+    model.eval()
+
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for images, labels in test_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+
+            outputs = model(images)
+            predictions = outputs.argmax(dim=1)
+
+            correct += (predictions == labels).sum().item()
+            total += labels.size(0)
+
+    accuracy = correct / total
+    return accuracy
+
+
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
@@ -52,7 +73,14 @@ def main():
         device=device
     )
 
+    test_accuracy = evaluate(
+        model=model,
+        test_loader=test_loader,
+        device=device
+    )
+
     print(f"Train loss: {train_loss:.4f}")
+    print(f"Test accuracy: {test_accuracy:.4f}")
 
 
 if __name__ == "__main__":
