@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -65,22 +67,44 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    train_loss = train_one_epoch(
-        model=model,
-        train_loader=train_loader,
-        criterion=criterion,
-        optimizer=optimizer,
-        device=device
+    num_epochs = 3
+
+    for epoch in range(num_epochs):
+        train_loss = train_one_epoch(
+            model=model,
+            train_loader=train_loader,
+            criterion=criterion,
+            optimizer=optimizer,
+            device=device
+        )
+
+        test_accuracy = evaluate(
+            model=model,
+            test_loader=test_loader,
+            device=device
+        )
+
+        print(
+            f"Epoch [{epoch + 1}/{num_epochs}], "
+            f"train loss: {train_loss:.4f}, "
+            f"test accuracy: {test_accuracy:.4f}"
+        )
+
+    checkpoint_dir = Path("checkpoints")
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
+    checkpoint_path = checkpoint_dir / "simple_cnn_mnist.pt"
+
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "num_epochs": num_epochs,
+            "test_accuracy": test_accuracy
+        },
+        checkpoint_path
     )
 
-    test_accuracy = evaluate(
-        model=model,
-        test_loader=test_loader,
-        device=device
-    )
-
-    print(f"Train loss: {train_loss:.4f}")
-    print(f"Test accuracy: {test_accuracy:.4f}")
+    print(f"Model saved to {checkpoint_path}")
 
 
 if __name__ == "__main__":
