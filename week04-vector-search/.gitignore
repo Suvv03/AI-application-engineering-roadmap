@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+data/embeddings.npy
+data/embedding_meta.json
